@@ -1,0 +1,15 @@
+<!doctype html>
+<html ng-app="demo">
+
+<H3>Oauth2 Demo</H3>
+<p>Application B (localhost:8080) has protected resource http://localhost:8080/api/accounts/default which can only be access by authorized users</p>
+<p>Application A (localhost:8081) wants to access this resource</p>
+<p>Redirect is made to application B, the user has to login in application B (user: demo, pass:123456) and confirm access to application A</p>
+<p>After that redirect is made back to application A with temporary access code</p>
+<p>Then application A requests token using separate HTTP connection and when the token is granted makes call to application B REST resource</p>
+<p>Click link below to initiate the process</p>
+
+<body>
+<a href="http://localhost:8081/api/oauth2/resource-app-redirect">Get REST resource from another application using Oauth2</a>
+</body>
+</html>
