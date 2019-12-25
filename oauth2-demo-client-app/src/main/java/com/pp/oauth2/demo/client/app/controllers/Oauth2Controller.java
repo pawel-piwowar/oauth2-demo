@@ -47,7 +47,7 @@ public class Oauth2Controller {
 
         return oauth2Client.getToken(code)
                 .flatMap(oauth2Token -> profileConnector.getAccount(oauth2Token))
-                .cast(ResponseEntity.class);
+                .map(account -> ResponseEntity.ok().body(account));
 
     }
 

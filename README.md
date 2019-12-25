@@ -12,4 +12,4 @@
 2. Run "mvn clean install" from root directory of the project
 3. Start applications by typing : "mvn spring-boot:run" in  oauth2-demo-resource-app and oauth2-demo-client-app directories.
 This will start two applications on port 8080 and 8081 respectively  
-4. Type "http://localhost:8081" in web browser
+4. Type http://localhost:8081 in web browser
