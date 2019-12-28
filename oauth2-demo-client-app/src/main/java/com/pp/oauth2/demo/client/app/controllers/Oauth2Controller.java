@@ -40,15 +40,12 @@ public class Oauth2Controller {
     public Mono<ResponseEntity> getAccount(@RequestParam(required = false) String code,
                                            @RequestParam(required = false) String error,
                                            @RequestParam(name = "error_description", required = false) String errorDescription) {
-
         if (error != null) {
             return Mono.just(ResponseEntity.ok().body(error + " " + errorDescription));
         }
-
         return oauth2Client.getToken(code)
                 .flatMap(oauth2Token -> profileConnector.getAccount(oauth2Token))
                 .map(account -> ResponseEntity.ok().body(account));
-
     }
 
 

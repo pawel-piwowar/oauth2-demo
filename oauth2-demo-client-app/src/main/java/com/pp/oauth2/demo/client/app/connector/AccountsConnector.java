@@ -11,12 +11,10 @@ import reactor.core.publisher.Mono;
 @Service
 public class AccountsConnector {
     public Mono<Account> getAccount(Oauth2Token token)  {
-        WebClient webClient = WebClient
+        return WebClient
                 .builder()
                 .baseUrl("http://localhost:8080")
-                .build();
-
-        Mono<Account> response = webClient
+                .build()
                 .get()
                 .uri( uriBuilder -> uriBuilder
                         .path("/api/accounts/default")
@@ -24,7 +22,5 @@ public class AccountsConnector {
                 .header("authorization", "Bearer " + token.getAccessToken())
                 .exchange()
                 .flatMap(resp -> resp.bodyToMono(Account.class));
-
-        return response;
     }
 }

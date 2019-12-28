@@ -17,34 +17,27 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class Oauth2Connector {
 
     public Mono<Oauth2Token> getToken(String code)  {
-
-        final String  redirectUri = "http://localhost:8081/api/oauth2/account";
-
-        WebClient webClient = WebClient
+        return  WebClient
                 .builder()
                 .baseUrl("http://localhost:8080/oauth")
                 .filter(logRequest())
-                .build();
-
-        Mono<Oauth2Token> response = webClient
+                .build()
                 .post()
                 .uri( uriBuilder -> uriBuilder
                         .path("/token")
                         .queryParam("code", code)
                         .queryParam("grant_type", "authorization_code")
-                        .queryParam("redirect_uri", redirectUri)
+                        .queryParam("redirect_uri", "http://localhost:8081/api/oauth2/account")
                         .build())
                 .header("content-type", MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .header("Authorization", "Basic " + Base64Utils
                         .encodeToString(("demo-client-app" + ":" + "123456").getBytes(UTF_8)))
-                 .retrieve()
-                 .onStatus(HttpStatus::is4xxClientError, resp -> {
+                .retrieve()
+                .onStatus(HttpStatus::is4xxClientError, resp -> {
                     log.error("Error: " + resp);
                     return Mono.error(new RuntimeException("4xx"));
                 })
-                 .bodyToMono(Oauth2Token.class);
-
-        return response;
+                .bodyToMono(Oauth2Token.class);
     }
 
     private static ExchangeFilterFunction logRequest() {
