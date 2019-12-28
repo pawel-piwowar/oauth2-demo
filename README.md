@@ -8,12 +8,12 @@
 ```
 http://localhost:8080/oauth/authorize?client_id=demo-client-app&response_type=code&scope=read_account
 ```
-- The user has to login in "Resource Application" (user: "demo", pass:"123456"). Than he may accept (or reject) giving access to his account data for "Client Application"  
+- User has to login in "Resource Application" (user: "demo", pass:"123456"). Than he may accept (or reject) giving access to his account data for "Client Application"  
 - After user acceptance, redirect is made back to "Client Application" with temporary access code   
 ```
 http://localhost:8081/api/oauth2/account?code=[code]
 ```
-- Before returning response to web browser, "Client Application" makes call to "Resource Application" using separate HTTP connection (acting as HTTP client)   
+- Before returning any response to web browser, "Client Application" makes call to "Resource Application" using separate HTTP connection (acting as HTTP client)   
  "Client Application" is authenticated in "Resource Application" using login "demo-client-app" and pass: "123456"
 ```
     POST http://localhost:8080/oauth/token  
@@ -49,7 +49,7 @@ and response is received:
 Please note, that token value is never sent using client Internet browser. Separate connection is used instead,
 where oauth2-demo-client-app application acts as http client. In this case  WebClient from Spring Webflux is used (https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html).  
 Class for getting token: [com.pp.oauth2.demo.client.app.connector.Oauth2Connector](./oauth2-demo-client-app/src/main/java/com/pp/oauth2/demo/client/app/connector/Oauth2Connector.java)
-Class for getting requeted account data: [com.pp.oauth2.demo.client.app.connector.AccountsConnector](./oauth2-demo-client-app/src/main/java/com/pp/oauth2/demo/client/app/connector/AccountsConnector.java) 
+Class for getting requeted account data: [com.pp.oauth2.demo.client.app.connector.AccountsConnector](./oauth2-demo-client-app/src/main/java/com/pp/oauth2/demo/client/app/connector/AccountsConnector.java)  
 
 ### Running the demo
 
