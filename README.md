@@ -22,3 +22,7 @@ This project was created using following articles:
  
 - https://howtodoinjava.com/spring-boot2/oauth2-auth-server/
 - https://pattern-match.com/blog/2018/10/17/springboot2-with-oauth2-integration/
+
+### Comments
+
+In case of any problems/questions fell free to create issue here: https://github.com/pawel-piwowar/oauth2-demo/issues
