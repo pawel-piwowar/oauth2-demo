@@ -30,22 +30,28 @@ It will return following response:
         "token_type": "bearer",
         "refresh_token": "[uniqueaccess_tokeb_value]",
         "expires_in": 4815,
-        "scope": "read_account"
-    }
+        "scope": "read_account" }
 ```
-- Second call (still made using separate HTTP connection) is for the protected REST resource, token is send as header parameter. Response containing account data is sent back as response to client browser.
+- Second call (still made using separate HTTP connection) is for the protected REST resource, token is send as header parameter. 
 ```    
     GET http://localhost:8080/api/accounts/default  
     Headers:  
     authorization:Bearer [token value from previous response]
 ```  
+and response is received:
+```json
+{ "accountNumber":"3435656777565677",
+ "accountName":"Saving account",
+ "balance":45.67 }
+```
+- Response containing account data JSON is sent back as response to client browser.
 
-Please note, that token value is never sent using client internet browser. Separate connection is used instead,
-where oauth2-demo-client-app application acts as http client. In this case  WebClient from Spring Webflux is used,  
-class for getting token: [com.pp.oauth2.demo.client.app.connector.Oauth2Connector](./oauth2-demo-client-app\src\main\java\com\pp\oauth2\demo\client\app\connector\Oauth2Connector.java) and  
-class for getting requeted account data: [com.pp.oauth2.demo.client.app.connector.AccountsConnector](./oauth2-demo-client-app\src\main\java\com\pp\oauth2\demo\client\app\connector\AccountsConnector.java) 
+Please note, that token value is never sent using client Internet browser. Separate connection is used instead,
+where oauth2-demo-client-app application acts as http client. In this case  WebClient from Spring Webflux is used (https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html).  
+Class for getting token: [com.pp.oauth2.demo.client.app.connector.Oauth2Connector](./oauth2-demo-client-app\src\main\java\com\pp\oauth2\demo\client\app\connector\Oauth2Connector.java)
+Class for getting requeted account data: [com.pp.oauth2.demo.client.app.connector.AccountsConnector](./oauth2-demo-client-app\src\main\java\com\pp\oauth2\demo\client\app\connector\AccountsConnector.java) 
 
-### Usage
+### Running the demo
 
 1. Install java 1.8 or higher, maven 3.3
 2. Run "mvn clean install" from root directory of the project
