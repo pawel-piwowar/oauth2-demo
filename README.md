@@ -1,9 +1,9 @@
 # Oauth2 Demo
 
 - Application B ( oauth2-demo-resource-app  localhost:8080) has protected resource: http://localhost:8080/api/accounts/default (account data) which can only be accessed by authorized users. 
- One user is defined : login "demo", password: "123456"
+ Single user is defined : login "demo", password: "123456"
 - User "demo" is visiting application A (oauth2-demo-client-app, http://localhost:8081). Application A gives him possibility to retrieve his account data from application B.   
-- Redirect is made to application B, the user has to login in application B (user: "demo", pass:"123456") and confirm giving access to his account data for application A  
+- Redirect is made to application B, the user has to login in application B (user: "demo", pass:"123456"). Than he may accept (or reject) giving access to his account data for application A  
 - After that, redirect is made back to application A with temporary access code   
 - Before returning response to web browser, application A makes two calls to application B using separate HTTP connection (acting as HTTP client). 
 First one is for authorization token, second for the protected REST resource, token is send as header parameter. Response containing account data is sent back as response to client browser.
