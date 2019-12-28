@@ -16,6 +16,8 @@ First one is for authorization token, second for the protected REST resource, to
 This will start two applications on port 8080 and 8081 respectively  
 4. Type http://localhost:8081 in web browser
 
+Points 2-4 could be executed using "run.bat" script from root directory of the project.
+
 ### Resources 
 
 This project was created using following articles:
