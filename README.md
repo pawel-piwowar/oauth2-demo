@@ -1,20 +1,20 @@
 ## Oauth2 Demo
 
-### Sequence
-- Application B ( oauth2-demo-resource-app  localhost:8080) has protected resource: http://localhost:8080/api/accounts/default (account data) which can only be accessed by authorized users. 
- Single user is defined : login "demo", password: "123456"
-- User "demo" is visiting application A (oauth2-demo-client-app, http://localhost:8081). Application A gives him possibility to retrieve his account data from application B.   
-- Redirect is made to application B
+### Scenario
+- "Resource Application" ( oauth2-demo-resource-app,  localhost:8080) has protected resource: http://localhost:8080/api/accounts/default (account data) which can only be accessed by authorized users. 
+ Single user "demo" is defined. 
+- Anonymous user is visiting "Client Application" (oauth2-demo-client-app, http://localhost:8081). "Client Application" gives him possibility to retrieve his account data from "Resource Application".   
+- After user confirmation, redirect is made to "Resource Application"
 ```
 http://localhost:8080/oauth/authorize?client_id=demo-client-app&response_type=code&scope=read_account
 ```
-- The user has to login in application B (user: "demo", pass:"123456"). Than he may accept (or reject) giving access to his account data for application A  
-- After that, redirect is made back to application A with temporary access code   
+- The user has to login in "Resource Application" (user: "demo", pass:"123456"). Than he may accept (or reject) giving access to his account data for "Client Application"  
+- After user acceptance, redirect is made back to "Client Application" with temporary access code   
 ```
 http://localhost:8081/api/oauth2/account?code=[code]
 ```
-- Before returning response to web browser, application A makes call to application B using separate HTTP connection (acting as HTTP client)   
- Application A is authenticated in application B using login "demo-client-app" and pass: "123456"
+- Before returning response to web browser, "Client Application" makes call to "Resource Application" using separate HTTP connection (acting as HTTP client)   
+ "Client Application" is authenticated in "Resource Application" using login "demo-client-app" and pass: "123456"
 ```
     POST http://localhost:8080/oauth/token  
     Headers:
@@ -24,7 +24,7 @@ http://localhost:8081/api/oauth2/account?code=[code]
     code=[code from redirect]  
     redirect_uri=http://localhost:8081/api/oauth2/account  
 ```
-It will return following response: 
+response: 
 ```json
 {       "access_token": "[uniqueaccess_tokeb_value]",
         "token_type": "bearer",
@@ -32,7 +32,7 @@ It will return following response:
         "expires_in": 4815,
         "scope": "read_account" }
 ```
-- Second call (still made using separate HTTP connection) is for the protected REST resource, token is send as header parameter. 
+- Second call (still made using separate HTTP connection) is for the protected REST resource itself, token value is sent as header parameter. 
 ```    
     GET http://localhost:8080/api/accounts/default  
     Headers:  
@@ -44,7 +44,7 @@ and response is received:
  "accountName":"Saving account",
  "balance":45.67 }
 ```
-- Response containing account data JSON is sent back as response to client browser.
+- Response containing account data JSON is sent to client browser (it is response for http://localhost:8081/api/oauth2/account?code=[code] redirect).
 
 Please note, that token value is never sent using client Internet browser. Separate connection is used instead,
 where oauth2-demo-client-app application acts as http client. In this case  WebClient from Spring Webflux is used (https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html).  
