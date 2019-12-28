@@ -33,7 +33,6 @@ public class Oauth2Connector {
                         .queryParam("code", code)
                         .queryParam("grant_type", "authorization_code")
                         .queryParam("redirect_uri", redirectUri)
-                        .queryParam("scope", "read_account")
                         .build())
                 .header("content-type", MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .header("Authorization", "Basic " + Base64Utils
