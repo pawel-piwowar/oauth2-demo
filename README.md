@@ -48,8 +48,8 @@ and response is received:
 
 Please note, that token value is never sent using client Internet browser. Separate connection is used instead,
 where oauth2-demo-client-app application acts as http client. In this case  WebClient from Spring Webflux is used (https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html).  
-Class for getting token: [com.pp.oauth2.demo.client.app.connector.Oauth2Connector](./oauth2-demo-client-app\src\main\java\com\pp\oauth2\demo\client\app\connector\Oauth2Connector.java)
-Class for getting requeted account data: [com.pp.oauth2.demo.client.app.connector.AccountsConnector](./oauth2-demo-client-app\src\main\java\com\pp\oauth2\demo\client\app\connector\AccountsConnector.java) 
+Class for getting token: [com.pp.oauth2.demo.client.app.connector.Oauth2Connector](./oauth2-demo-client-app/src/main/java/com/pp/oauth2/demo/client/app/connector/Oauth2Connector.java)
+Class for getting requeted account data: [com.pp.oauth2.demo.client.app.connector.AccountsConnector](./oauth2-demo-client-app/src/main/java/com/pp/oauth2/demo/client/app/connector/AccountsConnector.java) 
 
 ### Running the demo
 
