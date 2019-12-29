@@ -1,6 +1,5 @@
 package com.pp.oauth2.demo.client.app.controllers;
 
-import com.pp.oauth2.demo.client.app.connector.AccountsConnector;
 import com.pp.oauth2.demo.client.app.connector.Oauth2Connector;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,13 +18,11 @@ import java.net.URI;
 @AllArgsConstructor
 public class Oauth2Controller {
 
-    private Oauth2Connector oauth2Client;
-
-    private AccountsConnector profileConnector;
+    private Oauth2Connector oauth2Connector;
 
     @GetMapping("/api/oauth2/resource-app-redirect")
     public Mono<Void> redirect(ServerHttpResponse response) {
-        URI uri = UriComponentsBuilder.fromUriString("http://localhost:8080/oauth/authorize")
+        URI uri = UriComponentsBuilder.fromUriString("http://localhost:8082/oauth/authorize")
                 .queryParam("client_id", "demo-client-app")
                 .queryParam("response_type", "code")
                 .queryParam("scope", "read_account")
@@ -43,8 +40,8 @@ public class Oauth2Controller {
         if (error != null) {
             return Mono.just(ResponseEntity.ok().body(error + " " + errorDescription));
         }
-        return oauth2Client.getToken(code)
-                .flatMap(oauth2Token -> profileConnector.getAccount(oauth2Token))
+        return oauth2Connector.getToken(code)
+                .flatMap(oauth2Token -> oauth2Connector.getResource(oauth2Token))
                 .map(account -> ResponseEntity.ok().body(account));
     }
 

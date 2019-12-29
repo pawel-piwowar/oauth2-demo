@@ -1,5 +1,6 @@
 package com.pp.oauth2.demo.client.app.connector;
 
+import com.pp.oauth2.demo.client.app.model.Account;
 import com.pp.oauth2.demo.client.app.model.Oauth2Token;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class Oauth2Connector {
     public Mono<Oauth2Token> getToken(String code)  {
         return  WebClient
                 .builder()
-                .baseUrl("http://localhost:8080/oauth")
+                .baseUrl("http://localhost:8082/oauth")
                 .filter(logRequest())
                 .build()
                 .post()
@@ -38,6 +39,36 @@ public class Oauth2Connector {
                     return Mono.error(new RuntimeException("4xx"));
                 })
                 .bodyToMono(Oauth2Token.class);
+    }
+
+    public Mono<Account> getResource(Oauth2Token token)  {
+        return WebClient
+                .builder()
+                .baseUrl("http://localhost:8080")
+                .filter(logRequest())
+                .filter(logResponse())
+                .build()
+                .get()
+                .uri( uriBuilder -> uriBuilder
+                        .path("/api/accounts/default")
+                        .build())
+                .header("Authorization", "Bearer " + token.getAccessToken())
+                .exchange()
+                .flatMap(resp -> resp.bodyToMono(Account.class));
+    }
+
+    private static ExchangeFilterFunction logResponse() {
+        return ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
+            if (log.isDebugEnabled()) {
+                StringBuilder sb = new StringBuilder("Response: \n");
+                clientResponse
+                        .headers()
+                        .asHttpHeaders()
+                        .forEach((name, values) -> values.forEach(value -> sb.append(name + ":" + values)));
+                log.debug(sb.toString());
+            }
+            return Mono.just(clientResponse);
+        });
     }
 
     private static ExchangeFilterFunction logRequest() {

@@ -1,4 +1,4 @@
-package com.pp.auth2.demo.resource.app.model;
+package com.pp.auth2.demo.auth.server.model;
 
 import lombok.Builder;
 import lombok.Data;

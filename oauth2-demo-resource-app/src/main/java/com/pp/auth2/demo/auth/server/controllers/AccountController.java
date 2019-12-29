@@ -1,6 +1,6 @@
-package com.pp.auth2.demo.resource.app.controllers;
+package com.pp.auth2.demo.auth.server.controllers;
 
-import com.pp.auth2.demo.resource.app.model.Account;
+import com.pp.auth2.demo.auth.server.model.Account;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

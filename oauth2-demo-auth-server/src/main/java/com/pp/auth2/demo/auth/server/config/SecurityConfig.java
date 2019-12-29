@@ -1,4 +1,4 @@
-package com.pp.auth2.demo.resource.app.config;
+package com.pp.auth2.demo.auth.server.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,13 +16,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-                .anonymous().disable()
                 .antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/oauth/authorize**", "/login**", "/error**")
+                .antMatchers("/login**", "/error**")
                 .permitAll()
                 .and()
+                .authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
                 .formLogin().permitAll();
+
     }
 
     @Override

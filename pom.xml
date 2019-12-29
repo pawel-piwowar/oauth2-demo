@@ -13,6 +13,7 @@
 	<modules>
         <module>oauth2-demo-resource-app</module>
         <module>oauth2-demo-client-app</module>
+		<module>oauth2-demo-auth-server</module>
     </modules>
 	
 </project>

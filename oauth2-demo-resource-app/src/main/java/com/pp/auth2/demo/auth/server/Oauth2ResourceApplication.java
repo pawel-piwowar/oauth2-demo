@@ -1,4 +1,4 @@
-package com.pp.auth2.demo.resource.app;
+package com.pp.auth2.demo.auth.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
