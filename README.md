@@ -9,7 +9,7 @@ Single user "demo" is defined with role "USER".
 ```
 http://localhost:8082/oauth/authorize?client_id=demo-client-app&response_type=code&scope=read_account
 ```
-- User has to login (user: "demo", pass:"123456"). Than he may accept (or reject) giving access to his account data for "Client Application"  
+- User has to login (user: "demo", pass:"123456"). Than he may accept (or reject) giving access to his account data to "Client Application"  
 - After user acceptance, redirect is made back to "Client Application" with temporary access code   
 ```
 http://localhost:8081/api/oauth2/account?code=[code]
@@ -34,7 +34,7 @@ response with access token value:
         "expires_in": 4815,
         "scope": "read_account" }
 ```
-- Now "Client Application" (still using HTTP client connection) makes call to "Resource Application" for REST resource "api/accounts/default",
+- Now "Client Application" (still using separate HTTP connection) makes call to "Resource Application" for REST resource "api/accounts/default",
 token value is sent for authorization as header parameter . 
 ```    
     GET http://localhost:8080/api/accounts/default  
@@ -53,7 +53,7 @@ after successful token validation, response is returned to "Client Application":
 
 Please note, that token value is never sent using client Internet browser. Separate connection is used instead,
 where oauth2-demo-client-app application acts as http client. In this case  WebClient from Spring Webflux is used.  
-Class : [com.pp.oauth2.demo.client.app.connector.Oauth2Connector](./oauth2-demo-client-app/src/main/java/com/pp/oauth2/demo/client/app/connector/Oauth2Connector.java)
+Class : [com.pp.oauth2.demo.client.app.connector.Oauth2Connector](./oauth2-demo-client-app/src/main/java/com/pp/oauth2/demo/client/app/connector/Oauth2Connector.java)  
 (user account data is also transferred through this separate connection, it could be sent back to client browser or not)
 
 Alternatively client application could be created using spring-security-oauth2-client.
@@ -62,7 +62,7 @@ Alternatively client application could be created using spring-security-oauth2-c
 
 1. Install java 1.8 or higher, maven 3.3
 2. Run "mvn clean install" from root directory of the project
-3. Start applications by typing : "mvn spring-boot:run" in oauth2-demo-resource-app and oauth2-demo-client-app, oauth2-demo-auth-server directories.
+3. Start applications by typing : "mvn spring-boot:run" in oauth2-demo-resource-app, oauth2-demo-client-app and oauth2-demo-auth-server directories.
 This will start three applications on ports 8080, 8081 and 8082 respectively  
 4. Type http://localhost:8081 in web browser
 
