@@ -10,9 +10,9 @@ Single user "demo" is defined with role "USER".
 http://localhost:8082/oauth/authorize?client_id=demo-client-app&response_type=code&scope=read_account
 ```
 - User has to login (user: "demo", pass:"123456").   
-![login](./docs/auth-server-login.png)
+![login](./docs/auth-server-login.png)  
 - Than he may accept (or reject) giving access to his account data to "Client Application"
-![approval](./docs/auth-server-approval.png)
+![approval](./docs/auth-server-approval.png)  
 - After user acceptance, redirect is made back to "Client Application" with temporary access code   
 ```
 http://localhost:8081/api/oauth2/account?code=[code]
@@ -53,7 +53,7 @@ after successful token validation, response is returned to "Client Application":
  "balance":45.67 }
 ```
 - This response containing account data JSON is sent to client browser (it is response for previous redirect: http://localhost:8081/api/oauth2/account?code=[code] ).
-![approval](./docs/account-data.png)
+![approval](./docs/account-data.png)  
 Please note, that token value is never sent using client Internet browser. Separate connection is used instead,
 where oauth2-demo-client-app application acts as http client. In this demo WebClient from Spring Webflux is used.  
 Class : [com.pp.oauth2.demo.client.app.connector.Oauth2Connector](./oauth2-demo-client-app/src/main/java/com/pp/oauth2/demo/client/app/connector/Oauth2Connector.java)  
