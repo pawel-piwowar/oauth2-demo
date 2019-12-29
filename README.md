@@ -2,19 +2,19 @@
 
 ### Scenario
 - "Resource Application" ( oauth2-demo-resource-app,  localhost:8080) has protected resource: http://localhost:8080/api/accounts/default (account data) which can only be accessed by authorized users. 
-- "Authorization Server" (oauth2-demo-auth-server, localhost:8082) is configured for authorization of "Resource Application" resources access 
- Single user "demo" is defined with role "USER". 
+- "Authorization Server" (oauth2-demo-auth-server, localhost:8082) is configured for authorization of "Resource Application". 
+Single user "demo" is defined with role "USER". 
 - Anonymous user is visiting "Client Application" (oauth2-demo-client-app, http://localhost:8081). "Client Application" gives him possibility to retrieve his account data from "Resource Application".   
 - After user confirmation, redirect is made to "Authorization Server"
 ```
 http://localhost:8082/oauth/authorize?client_id=demo-client-app&response_type=code&scope=read_account
 ```
-- User has to login on "Authorization Server" login screen (user: "demo", pass:"123456"). Than he may accept (or reject) giving access to his account data for "Client Application"  
+- User has to login (user: "demo", pass:"123456"). Than he may accept (or reject) giving access to his account data for "Client Application"  
 - After user acceptance, redirect is made back to "Client Application" with temporary access code   
 ```
 http://localhost:8081/api/oauth2/account?code=[code]
 ```
-- Before returning any response to web browser, "Client Application" makes call to "Authorization Server" using separate HTTP connection (acting as HTTP client)   
+- In order to get access token, "Client Application" makes call to "Authorization Server" using separate HTTP connection (acting as HTTP client)   
  "Client Application" is authenticating itself in "Authorization Server" using login "demo-client-app" and pass: "123456"
 ```
     POST http://localhost:8082/oauth/token  
@@ -26,24 +26,24 @@ http://localhost:8081/api/oauth2/account?code=[code]
     code=[code from redirect]  
     redirect_uri=http://localhost:8081/api/oauth2/account  
 ```
-response: 
+response with access token value: 
 ```json
 {       "access_token": "44aa81f8-fe2f-4b08-bde2-4cd7e86fe189",
         "token_type": "bearer",
-        "refresh_token": "[unique_access_token_value]",
+        "refresh_token": "[another_access_token_value]",
         "expires_in": 4815,
         "scope": "read_account" }
 ```
-- Second call (still made using separate HTTP connection) is for the protected REST resource itself, token value is sent as header parameter. 
+- Now "Client Application" (still using HTTP client connection) makes call to "Resource Application" for REST resource "api/accounts/default",
+token value is sent for authorization as header parameter . 
 ```    
     GET http://localhost:8080/api/accounts/default  
     Headers:  
     authorization:Bearer 44aa81f8-fe2f-4b08-bde2-4cd7e86fe189
 ```  
-
-on this stage "Resource Application" makes call to "Authorization Server" for token validation,
-address: "http://localhost:8082/oauth/check_token" (this call is made by spring-security-oauth2), 
-after successful token validation, response is returned:
+On this stage "Resource Application" makes call to "Authorization Server" for token validation,
+address: "http://localhost:8082/oauth/check_token" (this call is made by spring-security-oauth2 without user browser redirects), 
+after successful token validation, response is returned to "Client Application":
 ```json
 { "accountNumber":"3435656777565677",
  "accountName":"Saving account",
@@ -54,6 +54,7 @@ after successful token validation, response is returned:
 Please note, that token value is never sent using client Internet browser. Separate connection is used instead,
 where oauth2-demo-client-app application acts as http client. In this case  WebClient from Spring Webflux is used.  
 Class : [com.pp.oauth2.demo.client.app.connector.Oauth2Connector](./oauth2-demo-client-app/src/main/java/com/pp/oauth2/demo/client/app/connector/Oauth2Connector.java)
+(user account data is also transferred through this separate connection, it could be sent back to client browser or not)
 
 Alternatively client application could be created using spring-security-oauth2-client.
 
