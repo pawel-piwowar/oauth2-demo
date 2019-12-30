@@ -8,20 +8,23 @@ Single user "demo" is defined with role "USER".
 - User who has his account data in "Resource Application" and is using "Client Application"  
 
 ### Scenario
-- User is visiting "Client Application" which gives  
-- After user confirmation, redirect is made to "Authorization Server"
+
+![login](./docs/oauth-demo.png)  
+
+- User is visiting "Client Application" (1)
+- After user confirmation (2), redirect is made to "Authorization Server" (3)
 ```
 http://localhost:8082/oauth/authorize?client_id=demo-client-app&response_type=code&scope=read_account
 ```
-- User has to login (user: "demo", pass:"123456").   
+- User has to login (user: "demo", pass:"123456") (4,5).   
 ![login](./docs/auth-server-login.png)  
-- Than he may accept (or reject) giving access to his account data to "Client Application"
+- Than he may accept (or reject) giving access to his account data to "Client Application" (6,7)
 ![approval](./docs/auth-server-approval.png)  
-- After user acceptance, redirect is made back to "Client Application" with temporary access code   
+- After user acceptance, redirect is made back to "Client Application" with temporary access code (8)   
 ```
 http://localhost:8081/api/oauth2/account?code=[code]
 ```
-- In order to get access token, "Client Application" makes call to "Authorization Server" using separate HTTP connection (acting as HTTP client).
+- In order to get access token, "Client Application" makes call to "Authorization Server" using separate HTTP connection (acting as HTTP client) (9).
  "Client Application" is authenticating itself in "Authorization Server" using login "demo-client-app" and pass: "123456"
 ```
     POST http://localhost:8082/oauth/token  
@@ -42,21 +45,21 @@ response with access token value:
         "scope": "read_account" }
 ```
 - Now "Client Application" (still using separate HTTP connection) makes call to "Resource Application" for REST resource "api/accounts/default",
-token value is sent for authorization as header parameter . 
+token value is sent for authorization as header parameter (10). 
 ```    
     GET http://localhost:8080/api/accounts/default  
     Headers:  
     authorization:Bearer 44aa81f8-fe2f-4b08-bde2-4cd7e86fe189
 ```  
-On this stage "Resource Application" makes call to "Authorization Server" for token validation,
+On this stage "Resource Application" makes call to "Authorization Server" for token validation (11),
 address: "http://localhost:8082/oauth/check_token" (this call is made by spring-security-oauth2 without user browser redirects), 
-after successful token validation, response is returned to "Client Application":
+after successful token validation, response is returned to "Client Application" (12):
 ```json
 { "accountNumber":"3435656777565677",
  "accountName":"Saving account",
  "balance":45.67 }
 ```
-- This response containing account data JSON is sent to client browser (it is response for previous redirect: http://localhost:8081/api/oauth2/account?code=[code] ).
+- This response containing account data JSON is sent to client browser (it is response for previous redirect: http://localhost:8081/api/oauth2/account?code=[code] ) (13).
 ![approval](./docs/account-data.png)  
 Please note, that token value is never sent using client Internet browser. Separate connection is used instead,
 where oauth2-demo-client-app application acts as http client. In this demo WebClient from Spring Webflux is used.  
