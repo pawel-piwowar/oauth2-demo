@@ -1,10 +1,14 @@
-## Oauth2 Demo
+## Oauth2 Demo with Spring Boot 2 and WebFlux
+
+### Actors
+- "Resource Application" ( oauth2-demo-resource-app,  localhost:8080) has protected resource: http://localhost:8080/api/accounts/default (account data) which can only be accessed by authorized users. 
+- "Authorization Server" (oauth2-demo-auth-server, localhost:8082) is configured for authorization of "Resource Application".
+Single user "demo" is defined with role "USER". 
+- "Client Application" (oauth2-demo-client-app, http://localhost:8081) wants to retrieve user account data from "Resource Application". (for example to validate user credibility)
+- User who has his account data in "Resource Application" and is using "Client Application"  
 
 ### Scenario
-- "Resource Application" ( oauth2-demo-resource-app,  localhost:8080) has protected resource: http://localhost:8080/api/accounts/default (account data) which can only be accessed by authorized users. 
-- "Authorization Server" (oauth2-demo-auth-server, localhost:8082) is configured for authorization of "Resource Application". 
-Single user "demo" is defined with role "USER". 
-- Anonymous user is visiting "Client Application" (oauth2-demo-client-app, http://localhost:8081). "Client Application" gives him possibility to retrieve his account data from "Resource Application".   
+- User is visiting "Client Application" which gives  
 - After user confirmation, redirect is made to "Authorization Server"
 ```
 http://localhost:8082/oauth/authorize?client_id=demo-client-app&response_type=code&scope=read_account
